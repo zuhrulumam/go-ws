@@ -1,3 +1,4 @@
+// +build ignore
 package main
 
 import (
@@ -13,6 +14,7 @@ import (
 var updagrader = websocket.Upgrader{}
 
 func main() {
+	log.SetFlags(0)
 	indexFile, err := os.Open("index.html")
 	if err != nil {
 		log.Printf("error on : %s", err)
@@ -30,7 +32,7 @@ func main() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := updagrader.Upgrade(w, r, nil)
 		if err != nil {
-			log.Printf("error on : %s", err)
+			log.Printf("error on create connection : %s", err)
 			return
 		}
 
@@ -39,7 +41,7 @@ func main() {
 		for {
 			msgType, msg, err := conn.ReadMessage()
 			if err != nil {
-				log.Printf("error on : %s", err)
+				log.Printf("error on read message : %s", err)
 				break
 			}
 
